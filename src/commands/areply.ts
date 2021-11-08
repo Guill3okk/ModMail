@@ -13,13 +13,13 @@ export default new Command('areply', async (caller, cmd, log) => {
 		.catch(() => false);
 
 	const userEmbed = new MessageEmbed()
-		.setAuthor('Staff Reply', cmd.channel.guild.dynamicIconURL())
+		.setAuthor('Staff', cmd.channel.guild.dynamicIconURL())
 		.setColor(COLORS.RED)
 		.setDescription(cmd.args.join(' ') || 'No content provided.')
 		.setTimestamp();
 	if (files.length > 0) userEmbed.addField('Files', `This message contains ${files.length} file${files.length > 1 ? 's' : ''}`);
 	const channelEmbed = new MessageEmbed()
-		.setAuthor('Staff Reply', cmd.channel.guild.dynamicIconURL())
+		.setAuthor('Staff', cmd.channel.guild.dynamicIconURL())
 		.setColor(COLORS.GREEN)
 		.setDescription(cmd.args.join(' ') || 'No content provided.')
 		.setTimestamp();
