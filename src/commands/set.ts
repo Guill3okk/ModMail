@@ -8,7 +8,7 @@ import {IConfig} from "../lib/types/Database";
 
 export default new Command('set', async (caller, cmd, _log, config) => {
 	const invalidArgsEmbed = new MessageEmbed()
-		.setTitle('Settings you can change of the bot.')
+		.setTitle('Configuración que puede cambiar del bot.')
 		.setColor(COLORS.GREEN)
 		.setThumbnail(cmd.channel.guild.dynamicIconURL())
 		.setDescription(`
