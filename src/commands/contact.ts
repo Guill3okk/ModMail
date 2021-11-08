@@ -3,13 +3,13 @@ import MessageEmbed from '../lib/structures/MessageEmbed';
 
 export default new Command('contact', async (caller, cmd, _log, config) => {
 	if (!cmd.args[0])
-		return caller.utils.discord.createMessage(cmd.channel.id, 'Please, specify someone to contact to.');
+		return caller.utils.discord.createMessage(cmd.channel.id, 'Por favor, especifique a alguien con quien contactar.');
 
 	const user = cmd.msg.mentions[0] || caller.bot.users.get(cmd.args[0]) || await caller.utils.discord.fetchUser(cmd.args[0]);
 	if (!user || !cmd.channel.guild.members.has(user.id))
-		return caller.utils.discord.createMessage(cmd.channel.id, 'Member not found.');
+		return caller.utils.discord.createMessage(cmd.channel.id, 'Miembro no encontrado.');
 	if (user.bot)
-		return caller.utils.discord.createMessage(cmd.channel.id, 'You cannot contact a bot.');
+		return caller.utils.discord.createMessage(cmd.channel.id, 'No puedes contactar a un bot.');
 
 	// Check if there is a current thread of the specified user.
 	const openLog = await caller.db.getLog(user.id, 'USER');
@@ -20,7 +20,7 @@ export default new Command('contact', async (caller, cmd, _log, config) => {
 			topic: user.id
 		});
 		if (!serverChannel)
-			return caller.utils.discord.createMessage(cmd.channel.id, 'Sorry, an error has occurred when opening the server channel.');
+			return caller.utils.discord.createMessage(cmd.channel.id, 'Lo sentimos, se ha producido un error al abrir el canal del servidor.');
 
 		// User Embed
 		const userEmbed = new MessageEmbed()
@@ -33,8 +33,8 @@ export default new Command('contact', async (caller, cmd, _log, config) => {
 			userEmbed.setThumbnail(config.embeds.contact.thumbnail);
 		const userMsg = await caller.utils.discord.createMessage(user.id, { embed: userEmbed.code }, true);
 		if (!userMsg) {
-			caller.utils.discord.createMessage(cmd.channel.id, 'Sorry, I could not DM the selected user.');
-			return serverChannel.delete('Could not DM the user.');
+			caller.utils.discord.createMessage(cmd.channel.id, 'Lo sentimos, no pude DM con el usuario seleccionado.');
+			return serverChannel.delete('No se pudo DM con el usuario.');
 		}
 
 		await caller.db.createLog({
@@ -55,10 +55,10 @@ export default new Command('contact', async (caller, cmd, _log, config) => {
 		});
 
 		// Send the message to the new channel.
-		caller.utils.discord.createMessage(serverChannel.id, `<@${cmd.msg.author.id}> the user <@${user.id}> has been contacted. Use this thread as a regular one.`);
-		return caller.utils.discord.createMessage(cmd.channel.id, 'The user has been contacted.');
+		caller.utils.discord.createMessage(serverChannel.id, `<@${cmd.msg.author.id}> the user <@${user.id}> ha sido contactado. Utilice este hilo como uno normal.`);
+		return caller.utils.discord.createMessage(cmd.channel.id, 'El usuario ha sido contactado.');
 	}
-	else return caller.utils.discord.createMessage(cmd.channel.id, 'There is already a thread opened with this user.');
+	else return caller.utils.discord.createMessage(cmd.channel.id, 'Ya hay un hilo abierto con este usuario.');
 },
 {
 	level: 'SUPPORT',
