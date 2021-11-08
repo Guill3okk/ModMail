@@ -120,8 +120,8 @@ export default async (caller: Mail, msg: Message): Promise<unknown> => {
 				.setThumbnail(msg.author.dynamicAvatarURL())
 				.setColor(config.embeds.staff.color)
 				.setDescription(msg.content  || 'No content provided.')
-				.addField('User', `${msg.author.username}#${msg.author.discriminator} \`[${msg.author.id}]\``)
-				.addField('Past threads', (await caller.db.numberOfPreviousLogs(msg.author.id)).toString())
+				.addField('Usuario', `${msg.author.username}#${msg.author.discriminator} \`[${msg.author.id}]\``)
+				.addField('Hilos pasados', (await caller.db.numberOfPreviousLogs(msg.author.id)).toString())
 				.setTimestamp();
 
 			caller.utils.discord.createMessage(msg.author.id, { embed: userOpenEmbed.code }, true);
