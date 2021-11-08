@@ -24,7 +24,7 @@ export default async (caller: Mail, msg: Message): Promise<unknown> => {
 		})
 			.catch(() => false);
 		if (!category)
-			return caller.utils.discord.createMessage(msg.channel.id, 'No se pudo crear una categoría. Configuración cancelada.');
+			return caller.utils.discord.createMessage(msg.channel.id, 'A category could not be created. Setup cancelled.');
 
 		config = await caller.db.createConfig({
 			mainCategoryID: category.id,
@@ -35,9 +35,9 @@ export default async (caller: Mail, msg: Message): Promise<unknown> => {
 			}
 		});
 		if (!config)
-			return caller.utils.discord.createMessage(msg.channel.id, 'No se pudo agregar la configuración a la base de datos. Configuración cancelada.');
+			return caller.utils.discord.createMessage(msg.channel.id, 'The config could not be added to the database. Setup cancelled.');
 
-		return caller.utils.discord.createMessage(msg.channel.id, 'Servidor completamente configurado. Se ha creado una categoría de ModMail para usted.');
+		return caller.utils.discord.createMessage(msg.channel.id, 'Server completely setup. A ModMail category has been created for you.');
 	}
 	else if (!config) return;
 
@@ -65,7 +65,7 @@ export default async (caller: Mail, msg: Message): Promise<unknown> => {
 		if (!log) {
 			// Check for account and guild ages.
 			if (config.accountAge && config.accountAge > (Date.now() - msg.author.createdAt))
-				return caller.utils.discord.createMessage(msg.author.id, 'Su cuenta no es lo suficientemente antigua para comunicarse con el staff.', true);
+				return caller.utils.discord.createMessage(msg.author.id, 'Your account is not old enough to contact the staff.', true);
 
 			if (config.guildAge) {
 				const guild = config.guildAgeID ?
@@ -74,9 +74,9 @@ export default async (caller: Mail, msg: Message): Promise<unknown> => {
 				if (guild) {
 					const guildMember = guild.members.get(msg.author.id);
 					if (!guildMember)
-						return caller.utils.discord.createMessage(msg.author.id, 'Su cuenta no ha estado en el servidor el tiempo suficiente para comunicarse staff.', true);
+						return caller.utils.discord.createMessage(msg.author.id, 'Your account has not been in the server long enough to contact the staff.', true);
 					if (config.guildAge > (Date.now() - guildMember.joinedAt))
-						return caller.utils.discord.createMessage(msg.author.id, 'Su cuenta no ha estado en el servidor el tiempo suficiente para comunicarse con staff.', true);
+						return caller.utils.discord.createMessage(msg.author.id, 'Your account has not been in the server long enough to contact the staff.', true);
 				}
 			}
 
@@ -86,7 +86,7 @@ export default async (caller: Mail, msg: Message): Promise<unknown> => {
 				topic: msg.author.id
 			});
 			if (!channel)
-				return caller.utils.discord.createMessage(msg.author.id, 'Lo sentimos, se ha producido un error al abrir tu hilo. Comuníquese con un administrador.', true);
+				return caller.utils.discord.createMessage(msg.author.id, 'Sorry, an error has occurred when opening your thread. Please, contact an administrator.', true);
 
 			// Creates the log.
 			log = await caller.db.createLog({
@@ -119,10 +119,9 @@ export default async (caller: Mail, msg: Message): Promise<unknown> => {
 				.setTitle(config.embeds.staff.title)
 				.setThumbnail(msg.author.dynamicAvatarURL())
 				.setColor(config.embeds.staff.color)
-				.setDescription(msg.content  || '
-						')
-				.addField('Usuario', `${msg.author.username}#${msg.author.discriminator} \`[${msg.author.id}]\``)
-				.addField('Hilos pasados', (await caller.db.numberOfPreviousLogs(msg.author.id)).toString())
+				.setDescription(msg.content  || 'No content provided.')
+				.addField('User', `${msg.author.username}#${msg.author.discriminator} \`[${msg.author.id}]\``)
+				.addField('Past Threads', (await caller.db.numberOfPreviousLogs(msg.author.id)).toString())
 				.setTimestamp();
 
 			caller.utils.discord.createMessage(msg.author.id, { embed: userOpenEmbed.code }, true);
