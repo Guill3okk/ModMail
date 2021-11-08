@@ -55,7 +55,7 @@ export default new Command('contact', async (caller, cmd, _log, config) => {
 		});
 
 		// Send the message to the new channel.
-		caller.utils.discord.createMessage(serverChannel.id, `<@${cmd.msg.author.id}> the user <@${user.id}> ha sido contactado. Utilice este hilo como uno normal.`);
+		caller.utils.discord.createMessage(serverChannel.id, `<@${cmd.msg.author.id}> El usuario <@${user.id}> ha sido contactado. Utilice este hilo como uno normal.`);
 		return caller.utils.discord.createMessage(cmd.channel.id, 'El usuario ha sido contactado.');
 	}
 	else return caller.utils.discord.createMessage(cmd.channel.id, 'Ya hay un hilo abierto con este usuario.');
