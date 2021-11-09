@@ -75,13 +75,13 @@ class MiscUtils {
 	async closeThread(log: LogDocument, config: IConfig | null, cmd?: CommandData, closureReason?: string): Promise<void> {
 		if (!config) return;
 		if (cmd) {
-			const closed = await cmd.channel.delete('Thread Closed').catch(() => false);
+			const closed = await cmd.channel.delete('Tema cerrado').catch(() => false);
 			if (closed === false) return;
 		}
 		else {
 			const channel = await this.caller.bot.getChannel(log.channelID) as TextChannel;
 			if (!channel) return;
-			const closed = await channel.delete('Thread Closed').catch(() => false);
+			const closed = await channel.delete('Tema cerrado').catch(() => false);
 			if (closed === false) return;
 		}
 
@@ -97,9 +97,9 @@ class MiscUtils {
 
 		if (config.logsChannelID) {
 			const logEmbed = new MessageEmbed()
-				.setTitle('Thread Closed')
+				.setTitle('Tema cerrado')
 				.setColor('#FF0000')
-				.setDescription(`The thread from \`${log.recipient.username}#${log.recipient.discriminator}\` has been closed by ${cmd ? cmd.msg.author.username : log.closer?.username || 'USER NOT FOUND'}.${process.env.LOGS_URL ? `\n${process.env.LOGS_URL}log?id=${log!._id}` : ''}`);
+				.setDescription(`El hilo de \`${log.recipient.username}#${log.recipient.discriminator}\` ha sido cerrado por ${cmd ? cmd.msg.author.username : log.closer?.username || 'USER NOT FOUND'}.${process.env.LOGS_URL ? `\n${process.env.LOGS_URL}log?id=${log!._id}` : ''}`);
 			this.caller.utils.discord.createMessage(config.logsChannelID, { embed: logEmbed.code });
 		}
 
