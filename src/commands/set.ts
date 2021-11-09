@@ -76,26 +76,26 @@ export default new Command('set', async (caller, cmd, _log, config) => {
 
 		case 'prefix':
 			if (cmd.args[1].length > 4)
-				return caller.utils.discord.createMessage(cmd.channel.id, 'The prefix cannot be over 4 characters.');
+				return caller.utils.discord.createMessage(cmd.channel.id, 'El prefijo no puede tener más de 4 caracteres.');
 			updated = await caller.db.updateConfig('prefix', cmd.args[1]);
 			if (updated)
-				return caller.utils.discord.createMessage(cmd.channel.id, 'The prefix has been changed.');
+				return caller.utils.discord.createMessage(cmd.channel.id, 'Se ha cambiado el prefijo.');
 			if (!updated)
-				return caller.utils.discord.createMessage(cmd.channel.id, 'The prefix could not be updated.');
+				return caller.utils.discord.createMessage(cmd.channel.id, 'No se pudo actualizar el prefijo.');
 			break;
 
 		case 'category':
 			// eslint-disable-next-line no-case-declarations
 			const categoryChannel = caller.bot.getChannel(cmd.args[1]);
 			if (!categoryChannel || categoryChannel.type !== 4 || categoryChannel.guild.id !== process.env.MAIN_GUILD_ID)
-				return caller.utils.discord.createMessage(cmd.channel.id, 'You have to select a valid channel within the main server.');
+				return caller.utils.discord.createMessage(cmd.channel.id, 'Tienes que seleccionar un canal válido dentro del servidor principal.');
 
 
 			updated = await caller.db.updateConfig('mainCategoryID', cmd.args[1]);
 			if (updated)
-				return caller.utils.discord.createMessage(cmd.channel.id, 'The category where tickets are created has been changed.');
+				return caller.utils.discord.createMessage(cmd.channel.id, 'Se ha cambiado la categoría donde se crean los tickets.');
 			if (!updated)
-				return caller.utils.discord.createMessage(cmd.channel.id, 'The category could not be updated.');
+				return caller.utils.discord.createMessage(cmd.channel.id, 'No se pudo actualizar la categoría.');
 			break;
 
 		case 'logs':
@@ -104,14 +104,14 @@ export default new Command('set', async (caller, cmd, _log, config) => {
 			if (cmd.args[1] !== 'none') {
 				logsChannel = cmd.msg.channelMentions[0] ? caller.bot.getChannel(cmd.msg.channelMentions[0]) || caller.bot.getChannel(cmd.args[1]) : caller.bot.getChannel(cmd.args[1]);
 				if (!logsChannel || logsChannel.type !== 0)
-					return caller.utils.discord.createMessage(cmd.channel.id, 'You have to select a valid channel.');
+					return caller.utils.discord.createMessage(cmd.channel.id, 'Tienes que seleccionar un canal válido.');
 			}
 
 			updated = await caller.db.updateConfig('logsChannelID', cmd.args[1] === 'none' ? '' : (logsChannel! as TextChannel).id, cmd.args[1] === 'none' ? 'UNSET' : 'SET');
 			if (updated)
-				return caller.utils.discord.createMessage(cmd.channel.id, 'The channel where logs are sent has been changed.');
+				return caller.utils.discord.createMessage(cmd.channel.id, 'Se ha cambiado el canal al que se envían los registros.');
 			if (!updated)
-				return caller.utils.discord.createMessage(cmd.channel.id, 'The logging channel could not be updated.');
+				return caller.utils.discord.createMessage(cmd.channel.id, 'No se pudo actualizar el canal de registro.');
 			break;
 
 		case 'status':
@@ -121,10 +121,10 @@ export default new Command('set', async (caller, cmd, _log, config) => {
 					name: cmd.args.slice(1).join(' '),
 					type: 0
 				});
-				return caller.utils.discord.createMessage(cmd.channel.id, 'The status has been changed.');
+				return caller.utils.discord.createMessage(cmd.channel.id, 'El estado ha cambiado.');
 			}
 			if (!updated)
-				return caller.utils.discord.createMessage(cmd.channel.id, 'The status could not be updated.');
+				return caller.utils.discord.createMessage(cmd.channel.id, 'No se pudo actualizar el estado.');
 			break;
 
 		case 'status_type':
@@ -206,182 +206,182 @@ export default new Command('set', async (caller, cmd, _log, config) => {
 		case 'embed_creation_title':
 			updated = await caller.db.updateConfig('embeds.creation.title', cmd.args.slice(1).join(' '));
 			if (updated)
-				return caller.utils.discord.createMessage(cmd.channel.id, 'Creation embed title updated.');
+				return caller.utils.discord.createMessage(cmd.channel.id, 'Se actualizó el título de inserción de la creación.');
 			if (!updated)
-				return caller.utils.discord.createMessage(cmd.channel.id, 'The creation embed title could not be updated.');
+				return caller.utils.discord.createMessage(cmd.channel.id, 'No se pudo actualizar el título de inserción de la creación.');
 			break;
 
 		case 'embed_creation_thumbnail':
 			updated = await caller.db.updateConfig('embeds.creation.thumbnail', cmd.args[1] === 'none' ? '' : cmd.args[1], cmd.args[1] === 'none' ? 'UNSET' : 'SET');
 			if (updated)
-				return caller.utils.discord.createMessage(cmd.channel.id, 'Creation embed thumbnail updated.');
+				return caller.utils.discord.createMessage(cmd.channel.id, 'Creación incrustar miniatura actualizado.');
 			if (!updated)
-				return caller.utils.discord.createMessage(cmd.channel.id, 'The creation embed thumbnail could not be updated.');
+				return caller.utils.discord.createMessage(cmd.channel.id, 'No se pudo actualizar la miniatura insertada de creación.');
 			break;
 
 		case 'embed_creation_description':
 			updated = await caller.db.updateConfig('embeds.creation.description', cmd.args.slice(1).join(' '));
 			if (updated)
-				return caller.utils.discord.createMessage(cmd.channel.id, 'Creation embed description updated.');
+				return caller.utils.discord.createMessage(cmd.channel.id, 'Se actualizó la descripción de la inserción de la creación.');
 			if (!updated)
-				return caller.utils.discord.createMessage(cmd.channel.id, 'The creation embed description could not be updated.');
+				return caller.utils.discord.createMessage(cmd.channel.id, 'No se pudo actualizar la descripción de inserción de creación.');
 			break;
 
 		case 'embed_creation_color':
 			if (!(/^#[0-9A-F]{6}$/i.test(cmd.args[1])))
-				return caller.utils.discord.createMessage(cmd.channel.id, 'You have to provide a valid hex color.');
+				return caller.utils.discord.createMessage(cmd.channel.id, 'Debes proporcionar un color hexadecimal válido.');
 
 			updated = await caller.db.updateConfig('embeds.creation.color', cmd.args[1]);
 			if (updated)
-				return caller.utils.discord.createMessage(cmd.channel.id, 'Creation embed color updated.');
+				return caller.utils.discord.createMessage(cmd.channel.id, 'Se actualizó el color de inserción de la creación.');
 			if (!updated)
-				return caller.utils.discord.createMessage(cmd.channel.id, 'The creation embed color could not be updated.');
+				return caller.utils.discord.createMessage(cmd.channel.id, 'No se pudo actualizar el color de inserción de creación.');
 			break;
 
 		case 'embed_creation_footer_text':
 			updated = await caller.db.updateConfig('embeds.creation.footer', cmd.args.slice(1).join(' '));
 			if (updated)
-				return caller.utils.discord.createMessage(cmd.channel.id, 'Creation embed footer updated.');
+				return caller.utils.discord.createMessage(cmd.channel.id, 'Pie de página de inserción de creación actualizado.');
 			if (!updated)
-				return caller.utils.discord.createMessage(cmd.channel.id, 'The creation embed footer could not be updated.');
+				return caller.utils.discord.createMessage(cmd.channel.id, 'No se pudo actualizar el pie de página para insertar de creación.');
 			break;
 
 		case 'embed_creation_footer_image':
 			if (!(/((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=+$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\\+$,\w]+@)[A-Za-z0-9.-]+)((?:\/[+~%/.\w\-_]*)?\??(?:[-+=&;%@.\w_]*)#?(?:[\w]*))?)/gm.test(cmd.args[1])) && cmd.args[1] !== 'none')
-				return caller.utils.discord.createMessage(cmd.channel.id, 'You have to provide a valid link.');
+				return caller.utils.discord.createMessage(cmd.channel.id, 'Debes proporcionar un enlace válido.');
 
 			updated = await caller.db.updateConfig('embeds.creation.footerImageURL', cmd.args[1] === 'none' ? '' : cmd.args[1], cmd.args[1] === 'none' ? 'UNSET' : 'SET');
 			if (updated)
-				return caller.utils.discord.createMessage(cmd.channel.id, 'Creation embed footer image updated.');
+				return caller.utils.discord.createMessage(cmd.channel.id, 'Se actualizó la imagen de pie de página de inserción de creación.');
 			if (!updated)
-				return caller.utils.discord.createMessage(cmd.channel.id, 'The creation embed footer image could not be updated.');
+				return caller.utils.discord.createMessage(cmd.channel.id, 'No se pudo actualizar la imagen de pie de página insertada de creación.');
 			break;
 
 		case 'embed_contact_title':
 			updated = await caller.db.updateConfig('embeds.contact.title', cmd.args.slice(1).join(' '));
 			if (updated)
-				return caller.utils.discord.createMessage(cmd.channel.id, 'Contact embed title updated.');
+				return caller.utils.discord.createMessage(cmd.channel.id, 'Se actualizó el título de inserción del contacto.');
 			if (!updated)
-				return caller.utils.discord.createMessage(cmd.channel.id, 'The contact embed title could not be updated.');
+				return caller.utils.discord.createMessage(cmd.channel.id, 'No se pudo actualizar el título de inserción del contacto.');
 			break;
 
 		case 'embed_contact_thumbnail':
 			updated = await caller.db.updateConfig('embeds.contact.thumbnail', cmd.args[1] === 'none' ? '' : cmd.args[1], cmd.args[1] === 'none' ? 'UNSET' : 'SET');
 			if (updated)
-				return caller.utils.discord.createMessage(cmd.channel.id, 'Contact embed thumbnail updated.');
+				return caller.utils.discord.createMessage(cmd.channel.id, 'Se actualizó la miniatura de inserción de contacto.');
 			if (!updated)
-				return caller.utils.discord.createMessage(cmd.channel.id, 'The contact embed thumbnail could not be updated.');
+				return caller.utils.discord.createMessage(cmd.channel.id, 'No se pudo actualizar la miniatura de inserción del contacto.');
 			break;
 
 		case 'embed_contact_description':
 			updated = await caller.db.updateConfig('embeds.contact.description', cmd.args.slice(1).join(' '));
 			if (updated)
-				return caller.utils.discord.createMessage(cmd.channel.id, 'Contact embed description updated.');
+				return caller.utils.discord.createMessage(cmd.channel.id, 'Se actualizó la descripción de inserción de contacto.');
 			if (!updated)
-				return caller.utils.discord.createMessage(cmd.channel.id, 'The contact embed description could not be updated.');
+				return caller.utils.discord.createMessage(cmd.channel.id, 'No se pudo actualizar la descripción de inserción del contacto.');
 			break;
 
 		case 'embed_contact_color':
 			if (!(/^#[0-9A-F]{6}$/i.test(cmd.args[1])))
-				return caller.utils.discord.createMessage(cmd.channel.id, 'You have to provide a valid hex color.');
+				return caller.utils.discord.createMessage(cmd.channel.id, 'Debes proporcionar un color hexadecimal válido.');
 
 			updated = await caller.db.updateConfig('embeds.contact.color', cmd.args[1]);
 			if (updated)
-				return caller.utils.discord.createMessage(cmd.channel.id, 'Contact embed color updated.');
+				return caller.utils.discord.createMessage(cmd.channel.id, 'Color de inserción de contacto actualizado.');
 			if (!updated)
-				return caller.utils.discord.createMessage(cmd.channel.id, 'The contact embed color could not be updated.');
+				return caller.utils.discord.createMessage(cmd.channel.id, 'No se pudo actualizar el color de inserción del contacto.');
 			break;
 
 		case 'embed_contact_footer_text':
 			updated = await caller.db.updateConfig('embeds.contact.footer', cmd.args.slice(1).join(' '));
 			if (updated)
-				return caller.utils.discord.createMessage(cmd.channel.id, 'Contact embed footer updated.');
+				return caller.utils.discord.createMessage(cmd.channel.id, 'Contacto para insertar pie de página actualizado.');
 			if (!updated)
-				return caller.utils.discord.createMessage(cmd.channel.id, 'The contact embed footer could not be updated.');
+				return caller.utils.discord.createMessage(cmd.channel.id, 'No se pudo actualizar el pie de página para insertar contactos.');
 			break;
 
 		case 'embed_contact_footer_image':
 			if (!(/((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=+$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\\+$,\w]+@)[A-Za-z0-9.-]+)((?:\/[+~%/.\w\-_]*)?\??(?:[-+=&;%@.\w_]*)#?(?:[\w]*))?)/gm.test(cmd.args[1])) && cmd.args[1] !== 'none')
-				return caller.utils.discord.createMessage(cmd.channel.id, 'You have to provide a valid link.');
+				return caller.utils.discord.createMessage(cmd.channel.id, 'Debes proporcionar un enlace válido.');
 
 			updated = await caller.db.updateConfig('embeds.contact.footerImageURL', cmd.args[1] === 'none' ? '' : cmd.args[1], cmd.args[1] === 'none' ? 'UNSET' : 'SET');
 			if (updated)
-				return caller.utils.discord.createMessage(cmd.channel.id, 'Contact embed footer image updated.');
+				return caller.utils.discord.createMessage(cmd.channel.id, 'Se actualizó la imagen de pie de página de inserción de contacto.');
 			if (!updated)
-				return caller.utils.discord.createMessage(cmd.channel.id, 'The contact embed footer image could not be updated.');
+				return caller.utils.discord.createMessage(cmd.channel.id, 'No se pudo actualizar la imagen del pie de página para insertar el contacto.');
 			break;
 
 		case 'embed_closure_title':
 			updated = await caller.db.updateConfig('embeds.closure.title', cmd.args.slice(1).join(' '));
 			if (updated)
-				return caller.utils.discord.createMessage(cmd.channel.id, 'Closure embed title updated.');
+				return caller.utils.discord.createMessage(cmd.channel.id, 'Se actualizó el título de inserción de cierre.');
 			if (!updated)
-				return caller.utils.discord.createMessage(cmd.channel.id, 'The closure embed title could not be updated.');
+				return caller.utils.discord.createMessage(cmd.channel.id, 'No se pudo actualizar el título de inserción de cierre.');
 			break;
 
 		case 'embed_closure_thumbnail':
 			updated = await caller.db.updateConfig('embeds.closure.thumbnail', cmd.args[1] === 'none' ? '' : cmd.args[1], cmd.args[1] === 'none' ? 'UNSET' : 'SET');
 			if (updated)
-				return caller.utils.discord.createMessage(cmd.channel.id, 'Closure embed thumbnail updated.');
+				return caller.utils.discord.createMessage(cmd.channel.id, 'Cierre incrustar miniatura actualizado.');
 			if (!updated)
-				return caller.utils.discord.createMessage(cmd.channel.id, 'The closure embed thumbnail could not be updated.');
+				return caller.utils.discord.createMessage(cmd.channel.id, 'No se pudo actualizar la miniatura de inserción de cierre.');
 			break;
 
 		case 'embed_closure_description':
 			updated = await caller.db.updateConfig('embeds.closure.description', cmd.args.slice(1).join(' '));
 			if (updated)
-				return caller.utils.discord.createMessage(cmd.channel.id, 'Closure embed description updated.');
+				return caller.utils.discord.createMessage(cmd.channel.id, 'Se actualizó la descripción de inserción del cierre.');
 			if (!updated)
-				return caller.utils.discord.createMessage(cmd.channel.id, 'The closure embed description could not be updated.');
+				return caller.utils.discord.createMessage(cmd.channel.id, 'No se pudo actualizar la descripción de inserción del cierre.');
 			break;
 
 		case 'embed_closure_color':
 			if (!(/^#[0-9A-F]{6}$/i.test(cmd.args[1])))
-				return caller.utils.discord.createMessage(cmd.channel.id, 'You have to provide a valid hex color.');
+				return caller.utils.discord.createMessage(cmd.channel.id, 'Debes proporcionar un color hexadecimal válido.');
 
 			updated = await caller.db.updateConfig('embeds.closure.color', cmd.args[1]);
 			if (updated)
-				return caller.utils.discord.createMessage(cmd.channel.id, 'Closure embed color updated.');
+				return caller.utils.discord.createMessage(cmd.channel.id, 'Color de incrustación de cierre actualizado.');
 			if (!updated)
-				return caller.utils.discord.createMessage(cmd.channel.id, 'The closure embed color could not be updated.');
+				return caller.utils.discord.createMessage(cmd.channel.id, 'No se pudo actualizar el color de inserción del cierre.');
 			break;
 
 		case 'embed_closure_footer_text':
 			updated = await caller.db.updateConfig('embeds.closure.footer', cmd.args.slice(1).join(' '));
 			if (updated)
-				return caller.utils.discord.createMessage(cmd.channel.id, 'Closure embed footer updated.');
+				return caller.utils.discord.createMessage(cmd.channel.id, 'Pie de página de inserción de cierre actualizado.');
 			if (!updated)
-				return caller.utils.discord.createMessage(cmd.channel.id, 'The closure embed footer could not be updated.');
+				return caller.utils.discord.createMessage(cmd.channel.id, 'No se pudo actualizar el pie de página de inserción de cierre.');
 			break;
 
 		case 'embed_closure_footer_image':
 			if (!(/((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=+$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\\+$,\w]+@)[A-Za-z0-9.-]+)((?:\/[+~%/.\w\-_]*)?\??(?:[-+=&;%@.\w_]*)#?(?:[\w]*))?)/gm.test(cmd.args[1])) && cmd.args[1] !== 'none')
-				return caller.utils.discord.createMessage(cmd.channel.id, 'You have to provide a valid link.');
+				return caller.utils.discord.createMessage(cmd.channel.id, 'Debes proporcionar un enlace válido.');
 
 			updated = await caller.db.updateConfig('embeds.closure.footerImageURL', cmd.args[1] === 'none' ? '' : cmd.args[1], cmd.args[1] === 'none' ? 'UNSET' : 'SET');
 			if (updated)
-				return caller.utils.discord.createMessage(cmd.channel.id, 'Closure embed footer image updated.');
+				return caller.utils.discord.createMessage(cmd.channel.id, 'Se actualizó la imagen de pie de página de inserción de cierre.');
 			if (!updated)
-				return caller.utils.discord.createMessage(cmd.channel.id, 'The closure embed footer image could not be updated.');
+				return caller.utils.discord.createMessage(cmd.channel.id, 'No se pudo actualizar la imagen de pie de página de inserción de cierre.');
 			break;
 
 		case 'embed_staff_title':
 			updated = await caller.db.updateConfig('embeds.staff.title', cmd.args.slice(1).join(' '));
 			if (updated)
-				return caller.utils.discord.createMessage(cmd.channel.id, 'Staff embed title updated.');
+				return caller.utils.discord.createMessage(cmd.channel.id, 'Se actualizó el título de inserción del personal.');
 			if (!updated)
-				return caller.utils.discord.createMessage(cmd.channel.id, 'The staff embed title could not be updated.');
+				return caller.utils.discord.createMessage(cmd.channel.id, 'No se pudo actualizar el título de inserción de personal.');
 			break;
 
 		case 'embed_staff_color':
 			if (!(/^#[0-9A-F]{6}$/i.test(cmd.args[1])))
-				return caller.utils.discord.createMessage(cmd.channel.id, 'You have to provide a valid hex color.');
+				return caller.utils.discord.createMessage(cmd.channel.id, 'Debes proporcionar un color hexadecimal válido.');
 
 			updated = await caller.db.updateConfig('embeds.staff.color', cmd.args[1]);
 			if (updated)
-				return caller.utils.discord.createMessage(cmd.channel.id, 'Staff embed color updated.');
+				return caller.utils.discord.createMessage(cmd.channel.id, 'Se actualizó el color de inserción del personal.');
 			if (!updated)
-				return caller.utils.discord.createMessage(cmd.channel.id, 'The staff embed color could not be updated.');
+				return caller.utils.discord.createMessage(cmd.channel.id, 'No se pudo actualizar el color de inserción del pentagrama.');
 			break;
 		default:
 			caller.utils.discord.createMessage(cmd.channel.id, { embed: invalidArgsEmbed.code });
