@@ -6,7 +6,7 @@ import {Message, MessageFile} from 'eris';
 
 export default new Command('reply', async (caller, cmd, log) => {
 	if (!cmd.args[0] && cmd.msg.attachments.length === 0)
-		return caller.utils.discord.createMessage(cmd.channel.id, 'You must provide a reply.');
+		return caller.utils.discord.createMessage(cmd.channel.id, 'Debes dar una respuesta.');
 	const files: MessageFile[] = [];
 	if (cmd.msg.attachments.length > 0) for (const file of cmd.msg.attachments) await Axios.get<Buffer>(file.url, { responseType: 'arraybuffer' })
 		.then((response) => files.push({ file: response.data, name: file.filename }))
@@ -15,19 +15,19 @@ export default new Command('reply', async (caller, cmd, log) => {
 	const userEmbed = new MessageEmbed()
 		.setAuthor(`${cmd.msg.author.username}#${cmd.msg.author.discriminator}`, cmd.msg.author.dynamicAvatarURL())
 		.setColor(COLORS.RED)
-		.setDescription(cmd.args.join(' ') || 'No content provided.')
+		.setDescription(cmd.args.join(' ') || 'No se proporciona contenido.')
 		.setTimestamp();
 	if (files.length > 0) userEmbed.addField('Files', `This message contains ${files.length} file${files.length > 1 ? 's' : ''}`);
 	const channelEmbed = new MessageEmbed()
 		.setAuthor(`${cmd.msg.author.username}#${cmd.msg.author.discriminator}`, cmd.msg.author.dynamicAvatarURL())
 		.setColor(COLORS.GREEN)
-		.setDescription(cmd.args.join(' ') || 'No content provided.')
+		.setDescription(cmd.args.join(' ') || 'No se proporciona contenido.')
 		.setTimestamp();
 
 	const guildMsg = await caller.utils.discord.createMessage(cmd.channel.id, { embed: channelEmbed.code }, false, files);
 	const userMsg = await caller.utils.discord.createMessage(log!.recipient.id, { embed: userEmbed.code }, true, files);
 	if (!(guildMsg || userMsg))
-		return caller.utils.discord.createMessage(cmd.channel.id, 'There has been an error responding to the user.');
+		return caller.utils.discord.createMessage(cmd.channel.id, 'Ha habido un error al responder al usuario.');
 
 	// Remove schedules if any.
 	if (log!.closureMessage) caller.db.updateLog(log!._id, 'closureMessage', '', 'UNSET');
@@ -36,7 +36,7 @@ export default new Command('reply', async (caller, cmd, log) => {
 		caller.db.updateLog(log!._id, 'closer', '', 'UNSET');
 		const closureCancellationEmbed = new MessageEmbed()
 			.setTitle('Closure Cancelled')
-			.setDescription('This ticket will no longer be closed due to ticket activity.')
+			.setDescription('Este boleto ya no estará cerrado debido a la actividad del boleto.')
 			.setColor(COLORS.YELLOW);
 		caller.utils.discord.createMessage(cmd.channel.id, { embed: closureCancellationEmbed.code });
 	}
